@@ -9,8 +9,8 @@ data class CategoriesResponse(
     @Json(name = "totalCount") val totalCount: Int,
 ) {
     data class CategoryDataResponse(
-        @Json(name = "_id") val id: String? = "",
-        @Json(name = "name") val name: String? = "",
+        @Json(name = "_id") val id: String = "",
+        @Json(name = "name") val name: String = "",
     ) {
         fun toCategoryData(): Category {
             return Category(

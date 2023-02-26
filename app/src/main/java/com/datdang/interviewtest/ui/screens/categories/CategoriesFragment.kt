@@ -53,6 +53,7 @@ class CategoriesFragment : BaseFragment<FragmentCategoriesBinding>() {
         categoriesAdapter.itemClick.bindTo {
             when (it) {
                 is CategoriesAdapter.OnItemClick.ItemCategory -> {
+                    viewModel.saveData(it.data)
                     if (!it.data.isSelected) {
                         viewModel.selectedCategoryCount.postValue(
                             viewModel.selectedCategoryCount.value?.minus(1)

@@ -3,6 +3,7 @@ package com.datdang.interviewtest.di.modules
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.datdang.data.database.AppDatabase
 import com.datdang.data.storage.NormalSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,10 @@ import dagger.hilt.components.SingletonComponent
 abstract class StorageModule {
 
     companion object {
+
+        @Provides
+        fun provideRoomDatabase(@ApplicationContext context: Context): AppDatabase = AppDatabase.invoke(context)
+
 
         @Provides
         fun provideDefaultSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
