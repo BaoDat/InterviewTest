@@ -10,9 +10,12 @@ import com.datdang.interviewtest.utils.DispatchersProvider
 import com.datdang.domain.usecase.AccountUseCase
 import com.datdang.domain.usecase.utils.UseCaseResult
 import com.datdang.interviewtest.ui.base.NavigationEvent
+import com.datdang.interviewtest.ui.base.isLogged
 import com.datdang.interviewtest.ui.base.setToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +38,24 @@ class SignUpViewModel @Inject constructor(
     val letterRegex = Regex("(.*[a-z].*)(.*[A-Z].*)")
     val numericRegex = Regex("(.*\\d.*)")
     val symbolRegex = Regex("(.*\\W.*)")
+
+    val readyToNavigateCategories = MutableLiveData<Boolean>(true)
+
+    var isLanding = false
+
+    fun sleepTimeToStart() {
+        if (!isLanding) {
+            isLanding = true
+            viewModelScope.launch {
+                val totalSeconds = TimeUnit.SECONDS.toSeconds(2)
+                val tickSeconds = 1
+                for (second in totalSeconds downTo tickSeconds) {
+                    delay(100)
+                }
+                readyToNavigateCategories.value = false
+            }
+        }
+    }
 
     fun validateEmail(): Boolean {
         email.value.orEmpty().also {
@@ -98,14 +119,18 @@ class SignUpViewModel @Inject constructor(
                 when (val result = getUsersUseCase.executeRegisterAccount(inputData)) {
                     is UseCaseResult.Success -> {
                         sharedPreferences.setToken(result.data.token)
-                        viewModelScope.launch {
-                            _navigator.emit(NavigationEvent.Categories)
-                        }
+                        navigateToCategories()
                     }
                     is UseCaseResult.NetworkError -> {}
                     is UseCaseResult.Error -> {}
                 }
             }
+        }
+    }
+
+    fun navigateToCategories() {
+        viewModelScope.launch {
+            _navigator.emit(NavigationEvent.Categories)
         }
     }
 }

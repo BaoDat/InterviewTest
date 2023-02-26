@@ -8,3 +8,6 @@ import com.datdang.data.storage.NormalSharedPreferences
 fun NormalSharedPreferences.setToken(token: String?) = setValue(Const.USER_TOKEN, token ?: "")
 
 fun NormalSharedPreferences.getToken() = get<String>(Const.USER_TOKEN)
+
+fun NormalSharedPreferences.isLogged(): Boolean =
+    get<String>(Const.USER_TOKEN).orEmpty().isNotEmpty()

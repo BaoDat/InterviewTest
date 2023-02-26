@@ -181,5 +181,9 @@
             app:layout_constraintTop_toTopOf="@+id/tv_sign_up"
             app:srcCompat="@drawable/btn_signup" />
 
+        <include
+            android:id="@+id/viewLoading"
+            layout="@layout/view_loading" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,8 +7,11 @@ import androidx.fragment.app.viewModels
 import com.datdang.data.storage.NormalSharedPreferences
 import com.datdang.interviewtest.R
 import com.datdang.interviewtest.databinding.FragmentSignUpBinding
+import com.datdang.interviewtest.databinding.ViewLoadingBinding
+import com.datdang.interviewtest.extension.visibleOrGone
 import com.datdang.interviewtest.model.common.PasswordType
 import com.datdang.interviewtest.ui.base.BaseFragment
+import com.datdang.interviewtest.ui.base.isLogged
 import com.datdang.interviewtest.ui.screens.MainNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,6 +26,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     lateinit var sharedPreferences: NormalSharedPreferences
 
     private val viewModel: SignUpViewModel by viewModels()
+    private lateinit var viewLoadingBinding: ViewLoadingBinding
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSignUpBinding
         get() = { inflater, container, attachToParent ->
@@ -32,11 +36,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     override fun setupView() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-
+        viewLoadingBinding = ViewLoadingBinding.bind(binding.root)
+        viewModel.sleepTimeToStart()
     }
 
     override fun bindViewModel() {
         viewModel.navigator bindTo navigator::navigate
+        viewModel.readyToNavigateCategories bindTo ::bindToCategories
 
         viewModel.email bindTo {
             viewModel.emailError.value = null
@@ -92,6 +98,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
                     signUp()
                 }
             }
+        }
+    }
+
+    private fun bindToCategories(isLoading: Boolean){
+        viewLoadingBinding.pbLoading.visibleOrGone(isLoading)
+        if (!isLoading && sharedPreferences.isLogged()) {
+            viewModel.navigateToCategories()
         }
     }
 
