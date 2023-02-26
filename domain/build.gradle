@@ -41,4 +41,6 @@ dependencies {
 
     api("com.squareup.moshi:moshi-adapters:1.12.0")
     api("com.squareup.moshi:moshi-kotlin:1.12.0")
+
+    implementation("javax.inject:javax.inject:1")
 }

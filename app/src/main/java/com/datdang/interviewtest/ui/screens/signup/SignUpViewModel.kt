@@ -1,15 +1,25 @@
 package com.datdang.interviewtest.ui.screens.signup
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.datdang.data.storage.Const
+import com.datdang.data.storage.NormalSharedPreferences
 import com.datdang.interviewtest.extension.isEmailValid
 import com.datdang.interviewtest.ui.base.BaseViewModel
 import com.datdang.interviewtest.utils.DispatchersProvider
+import com.datdang.domain.usecase.AccountUseCase
+import com.datdang.domain.usecase.utils.UseCaseResult
+import com.datdang.interviewtest.ui.base.NavigationEvent
+import com.datdang.interviewtest.ui.base.setToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    dispatchers: DispatchersProvider
+    dispatchers: DispatchersProvider,
+    private val getUsersUseCase: AccountUseCase,
+    val sharedPreferences: NormalSharedPreferences,
 ) : BaseViewModel(dispatchers) {
 
     val email = MutableLiveData<String>("")
@@ -78,7 +88,24 @@ class SignUpViewModel @Inject constructor(
 
     fun signUp() {
         if (validateEmail() and validatePassword()) {
+            execute {
+                val  inputData: MutableMap<String, String> = mutableMapOf()
+                inputData["firstName"] = "Dang Bao"
+                inputData["lastName"] = "Dat"
+                inputData["email"] = email.value.orEmpty()
+                inputData["password"] = password.value.orEmpty()
 
+                when (val result = getUsersUseCase.executeRegisterAccount(inputData)) {
+                    is UseCaseResult.Success -> {
+                        sharedPreferences.setToken(result.data.token)
+                        viewModelScope.launch {
+//                            _navigator.emit(NavigationEvent.Categories)
+                        }
+                    }
+                    is UseCaseResult.NetworkError -> {}
+                    is UseCaseResult.Error -> {}
+                }
+            }
         }
     }
 }

@@ -18,11 +18,14 @@ class MainNavigatorImpl @Inject constructor(
 
     override fun navigate(event: NavigationEvent) {
         when (event) {
-            is NavigationEvent.SignUp -> navigateToSignUp()
+            is NavigationEvent.Categories -> navigateToCategories()
         }
     }
 
-    private fun navigateToSignUp() {
+    private fun navigateToCategories() {
+        val navController = findNavController()
+        when (navController?.currentDestination?.id) {
 
+        }
     }
 }
