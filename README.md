@@ -11,4 +11,6 @@
 ![9](/screenshot/screenshot-09.jpg?raw=true)
 
 ## Video
-[![Watch the video](/screenshot/screenshot-01.jpg)](/screenshot/video.mp4)
+https://user-images.githubusercontent.com/24568371/221417040-9a0c4ceb-974b-4d11-b992-e6aa853cddea.mp4
+
+
