@@ -6,10 +6,11 @@
     android:layout_height="wrap_content"
     android:paddingVertical="32dp"
     android:background="@drawable/bg_item_category_unselected"
+    android:layout_marginEnd="6dp"
     android:layout_marginBottom="8dp">
 
     <TextView
-        android:id="@+id/text_item_text"
+        android:id="@+id/tv_category_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#D1FFFFFF"

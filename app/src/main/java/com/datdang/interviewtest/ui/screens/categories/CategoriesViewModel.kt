@@ -19,6 +19,8 @@ class CategoriesViewModel @Inject constructor(
 
     val resultCategories = MutableLiveData<List<Category>>()
 
+    val selectedCategoryCount = MutableLiveData<Int>(0)
+
     fun fetchData() {
         execute {
             when (val result = getUsersUseCase.executeListUserFollow()) {

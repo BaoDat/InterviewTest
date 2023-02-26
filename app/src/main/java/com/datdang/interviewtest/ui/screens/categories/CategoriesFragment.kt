@@ -3,6 +3,8 @@ package com.datdang.interviewtest.ui.screens.categories
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import com.datdang.data.storage.NormalSharedPreferences
 import com.datdang.interviewtest.databinding.FragmentCategoriesBinding
 import com.datdang.interviewtest.ui.base.BaseFragment
@@ -20,6 +22,7 @@ class CategoriesFragment : BaseFragment<FragmentCategoriesBinding>() {
     lateinit var sharedPreferences: NormalSharedPreferences
 
     private val viewModel: CategoriesViewModel by viewModels()
+    private lateinit var categoriesAdapter: CategoriesAdapter
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCategoriesBinding
         get() = { inflater, container, attachToParent ->
@@ -31,17 +34,45 @@ class CategoriesFragment : BaseFragment<FragmentCategoriesBinding>() {
         binding.lifecycleOwner = this
 
         viewModel.fetchData()
-
+        setupDataList()
     }
 
     override fun bindViewModel() {
         viewModel.navigator bindTo navigator::navigate
 
+        viewModel.resultCategories bindTo { data ->
+            with(categoriesAdapter) {
+                items = data.toMutableList()
+            }
+        }
+
     }
 
     override fun bindViewEvents() {
         super.bindViewEvents()
+        categoriesAdapter.itemClick.bindTo {
+            when (it) {
+                is CategoriesAdapter.OnItemClick.ItemCategory -> {
+                    if (!it.data.isSelected) {
+                        viewModel.selectedCategoryCount.postValue(
+                            viewModel.selectedCategoryCount.value?.minus(1)
+                        )
+                    } else {
+                        viewModel.selectedCategoryCount.postValue(
+                            viewModel.selectedCategoryCount.value?.plus(1)
+                        )
+                    }
+                }
+            }
+        }
 
     }
 
+    private fun setupDataList() {
+        with(binding.rvCategories) {
+            adapter = CategoriesAdapter().also {
+                categoriesAdapter = it
+            }
+        }
+    }
 }
