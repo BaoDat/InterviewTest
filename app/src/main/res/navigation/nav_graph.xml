@@ -12,7 +12,13 @@
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_categoriesFragment"
+            app:destination="@id/categoriesFragment"
              />
     </fragment>
 
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.datdang.interviewtest.ui.screens.categories.CategoriesFragment"
+        android:label="CategoriesFragment"
+        tools:layout="@layout/fragment_categories"/>
 </navigation>

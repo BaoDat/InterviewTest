@@ -99,7 +99,7 @@ class SignUpViewModel @Inject constructor(
                     is UseCaseResult.Success -> {
                         sharedPreferences.setToken(result.data.token)
                         viewModelScope.launch {
-//                            _navigator.emit(NavigationEvent.Categories)
+                            _navigator.emit(NavigationEvent.Categories)
                         }
                     }
                     is UseCaseResult.NetworkError -> {}

@@ -85,6 +85,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>() {
     override fun bindViewEvents() {
         super.bindViewEvents()
         with(binding) {
+            binding.seekbarPassword.setOnTouchListener { _, _ ->  true }
+
             btnSignUp.setOnClickListener {
                 this@SignUpFragment.viewModel.apply {
                     signUp()
