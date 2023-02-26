@@ -11,10 +11,6 @@ import kotlinx.coroutines.launch
 @Suppress("PropertyName")
 abstract class BaseViewModel(private val dispatchersProvider: DispatchersProvider) : ViewModel() {
 
-    protected val _error = MutableSharedFlow<Throwable>()
-    val error: SharedFlow<Throwable>
-        get() = _error
-
     protected val _navigator = MutableSharedFlow<NavigationEvent>()
     val navigator: SharedFlow<NavigationEvent>
         get() = _navigator
